@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Microsoft.Office.Interop.Excel;
+
+
+
+namespace ExcelApp
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        _Application docExcel;
+        _Workbook workbooksExcel;
+        _Worksheet worksheetExcel;
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            docExcel = new Microsoft.Office.Interop.Excel.Application();
+            docExcel.Visible = false;
+            docExcel.DisplayAlerts = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            workbooksExcel = docExcel.Workbooks.Open(@"C:\Users\Junar\Desktop\OLD ACER\Booking.xlsx",
+
+            Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+            Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+            Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+
+            worksheetExcel = (_Worksheet)workbooksExcel.ActiveSheet;
+
+
+            int lastUsedRow = worksheetExcel.Cells.Find("*", System.Reflection.Missing.Value,
+                            System.Reflection.Missing.Value, System.Reflection.Missing.Value,
+                            Microsoft.Office.Interop.Excel.XlSearchOrder.xlByRows, Microsoft.Office.Interop.Excel.XlSearchDirection.xlPrevious,
+                            false, System.Reflection.Missing.Value, System.Reflection.Missing.Value).Row;
+
+            int excelrow = lastUsedRow + 1;
+
+            ((Range)worksheetExcel.Cells[excelrow.ToString(), "A"]).Value2 = textBox1.Text;
+            ((Range)worksheetExcel.Cells[excelrow.ToString(), "B"]).Value2 = textBox1.Text;
+
+
+            workbooksExcel.Save();
+            workbooksExcel.Close(false, Type.Missing, Type.Missing);
+            docExcel.Application.DisplayAlerts = true;
+            docExcel.Application.Quit();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            
+        }
+    }
+}
